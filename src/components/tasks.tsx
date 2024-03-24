@@ -1,8 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Trash2, Check } from "lucide-react";
+import { Trash2, Check, Pencil } from "lucide-react";
 import { toast } from "./ui/use-toast";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTrigger } from "./ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "./ui/dialog";
 
 interface TaskProps {
   id: number;
@@ -14,14 +21,15 @@ export default function Tasks() {
   const api = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const [editText, setEditText] = useState("");
+
+  const fetchTask = async () => {
+    const reponse = await fetch(`${api}/api/task`);
+    const data = await reponse.json();
+    setTasks(data.task);
+  };
 
   useEffect(() => {
-    const fetchTask = async () => {
-      const reponse = await fetch(`${api}/api/task`);
-      const data = await reponse.json();
-      console.log(data.task);
-      setTasks(data.task);
-    };
     fetchTask();
   }, [tasks]);
 
@@ -60,7 +68,10 @@ export default function Tasks() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ completed: updatedCompleted, id: id }), // Define o campo completed como true
+        body: JSON.stringify({
+          completed: updatedCompleted,
+          id: id,
+        }),
       });
 
       setTasks((prevTasks) =>
@@ -80,6 +91,38 @@ export default function Tasks() {
         variant: "destructive",
       });
     }
+  };
+
+  const handleEditTask = async (id: number) => {
+    try {
+      await fetch(`${api}/api/task`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+          title: editText,
+        }),
+      });
+
+      toast({
+        title: "Task updated!",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error editing task!",
+        duration: 2000,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEdit = (id: number, title: string) => {
+    setEditText(title);
+    console.log(tasks);
   };
 
   return (
@@ -137,34 +180,79 @@ export default function Tasks() {
                   {task.title}
                 </label>
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <div className="px-1 z-20">
-                    <button
-                      className="flex items-center justify-center z-20"
-                    >
-                      <Trash2 className="hover:text-red-500" />
-                    </button>
-                  </div>
-                </DialogTrigger>
-                <DialogContent className="flex flex-col justify-center items-center w-[80%] rounded-md bg-transparent border-zinc-600">
-                  <DialogHeader>
-                    <h1 className="text-white font-medium">Are you sure you want to delete this task?</h1>
-                  </DialogHeader>
-                  <div className="flex items-center gap-2 mt-5">
-                    <DialogClose asChild>
-                      <button className="text-black bg-zinc-300 px-3 py-1 rounded hover:bg-zinc-400 transition-colors duration-100">
-                        Cancel
+              <div className="flex items-center justify-center gap-2">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div className="px-1 z-20">
+                      <button
+                        className="flex items-center justify-center z-20"
+                        onClick={() => handleEdit(task.id, task.title)}
+                      >
+                        <Pencil className="hover:text-violet-500" />
                       </button>
-                    </DialogClose>
-                    <DialogFooter>
-                      <button className="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded transition-colors duration-100" onClick={() => handleDelete(task.id)}>
-                        Delete
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col justify-center items-center w-[80%] rounded-md bg-transparent border-zinc-600">
+                    <DialogHeader>
+                      <h1 className="text-white font-medium">Edit Task</h1>
+                    </DialogHeader>
+                    <div>
+                      <input
+                        type="text"
+                        className="w-full rounded bg-transparent border py-1 border-zinc-600 placeholder:text-white pl-2"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 mt-5">
+                      <DialogClose asChild>
+                        <button className="text-black bg-zinc-300 px-3 py-1 rounded hover:bg-zinc-400 transition-colors duration-100">
+                          Cancel
+                        </button>
+                      </DialogClose>
+                      <DialogFooter>
+                        <button
+                          className="text-white bg-violet-700 hover:bg-violet-800 px-4 py-1 rounded transition-colors duration-100"
+                          onClick={() => handleEditTask(task.id)}
+                        >
+                          Edit
+                        </button>
+                      </DialogFooter>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div className="px-1 z-20">
+                      <button className="flex items-center justify-center z-20">
+                        <Trash2 className="hover:text-red-500" />
                       </button>
-                    </DialogFooter>
-                  </div>
-                </DialogContent>
-              </Dialog>
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col justify-center items-center w-[80%] rounded-md bg-transparent border-zinc-600">
+                    <DialogHeader>
+                      <h1 className="text-white font-medium">
+                        Are you sure you want to delete this task?
+                      </h1>
+                    </DialogHeader>
+                    <div className="flex items-center gap-2 mt-5">
+                      <DialogClose asChild>
+                        <button className="text-black bg-zinc-300 px-3 py-1 rounded hover:bg-zinc-400 transition-colors duration-100">
+                          Cancel
+                        </button>
+                      </DialogClose>
+                      <DialogFooter>
+                        <button
+                          className="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded transition-colors duration-100"
+                          onClick={() => handleDelete(task.id)}
+                        >
+                          Delete
+                        </button>
+                      </DialogFooter>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
           </div>
         ))}

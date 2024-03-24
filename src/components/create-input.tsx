@@ -31,13 +31,13 @@ export default function CreateInput() {
       toast({
         title: "Error creating task!",
         duration: 2000,
-        variant: 'destructive'
+        variant: "destructive",
       });
     }
   };
 
   return (
-    <div className="flex items-center justify-center max-w-[90%] mx-auto -mt-5 z-32">
+    <div className="flex items-center justify-center w-full max-w-[90.5%] mb-10 mx-auto -mt-5 z-32">
       <div className="flex justify-center items-center gap-2 w-full z-20">
         <input
           type="text"

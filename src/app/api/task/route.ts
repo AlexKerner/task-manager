@@ -30,13 +30,14 @@ export async function DELETE(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  const { id, completed } = await req.json()
+  const { id, completed, title } = await req.json()
   const task = await prisma.task.update({
     where: {
       id
     },
     data: {
-      completed
+      completed,
+      title
     }
   })
   return Response.json({ message: "Task updated", task })
