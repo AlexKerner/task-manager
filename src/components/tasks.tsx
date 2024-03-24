@@ -147,11 +147,11 @@ export default function Tasks() {
                     </button>
                   </div>
                 </DialogTrigger>
-                <DialogContent className="flex flex-col justify-center items-center">
+                <DialogContent className="flex flex-col justify-center items-center w-[80%] rounded-md bg-transparent border-zinc-600">
                   <DialogHeader>
-                    <h1 className="text-black font-medium">Are you sure you want delet this task?</h1>
+                    <h1 className="text-white font-medium">Are you sure you want to delete this task?</h1>
                   </DialogHeader>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mt-5">
                     <DialogClose asChild>
                       <button className="text-black bg-zinc-300 px-3 py-1 rounded hover:bg-zinc-400 transition-colors duration-100">
                         Cancel

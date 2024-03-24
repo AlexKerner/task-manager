@@ -3,7 +3,7 @@ import { SparklesCore } from "./ui/sparkles";
 
 export default function Header() {
   return (
-    <div className="w-full bg-[#111111] flex items-center justify-center py-20">
+    <div className="w-full bg-[#0d0d0d] flex items-center justify-center py-20">
       <div className="w-full z-10 absolute top-0 right-0 bottom-[68%] md:bottom-[65%] max-h-full">
         <SparklesCore
           id="tsparticlesfullpage"
