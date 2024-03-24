@@ -199,7 +199,7 @@ export default function Tasks() {
                     <div>
                       <input
                         type="text"
-                        className="w-full rounded bg-transparent border py-1 border-zinc-600 placeholder:text-white pl-2"
+                        className="w-full rounded bg-transparent border py-1 border-zinc-600 placeholder:text-white pl-2 ring-1 ring-inset ring-transparent focus:ring-1 focus:border-violet-900  focus:ring-inset focus:outline-none focus:ring-violet-900"
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
                       />
