@@ -38,7 +38,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col z-30 border-[3px] px-10 py-10 rounded-md gap-5 backdrop-blur-[4px]">
+    <div className="flex flex-col z-30 border-[3px] px-10 py-10 rounded-md gap-5 backdrop-blur-[4px] max-w-[85%] sm:max-w-[100%] mx-auto">
       <h1 className="text-3xl font-semibold mb-10">Sign In</h1>
       <label htmlFor="" className="flex flex-col gap-2 z-30">
         Email
