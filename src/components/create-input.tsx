@@ -4,8 +4,14 @@ import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "./ui/use-toast";
 
+
+
+
 export default function CreateInput() {
   const api = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const pathname = window.location.pathname; // Obtém o pathname da URL
+  const userId = parseInt(pathname.split("/")[2], 10);
+
   const [titleInput, setTitleInput] = useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,12 +20,12 @@ export default function CreateInput() {
 
   const createTask = async () => {
     try {
-      fetch(`${api}/api/task`, {
+      fetch(`${api}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title: titleInput }),
+        body: JSON.stringify({ title: titleInput, userId: userId }),
       });
       setTitleInput("");
       toast({

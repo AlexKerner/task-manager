@@ -15,18 +15,28 @@ interface TaskProps {
   id: number;
   title: string;
   completed: boolean;
+  userId: number
+
 }
 
 export default function Tasks() {
-  const api = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+ 
+  const pathname = window.location.pathname; // Obtém o pathname da URL
+  const userId = parseInt(pathname.split("/")[2], 10);
+ 
+
+  const api = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [editText, setEditText] = useState("");
 
   const fetchTask = async () => {
-    const reponse = await fetch(`${api}/api/task`);
+    const reponse = await fetch(`${api}/tasks`);
     const data = await reponse.json();
-    setTasks(data.task);
+    
+     const filteredTasks = data.tasks.filter((task: TaskProps) => task.userId === userId);
+    
+    setTasks(filteredTasks);
   };
 
   useEffect(() => {
@@ -35,7 +45,7 @@ export default function Tasks() {
 
   const handleDelete = (id: number) => {
     try {
-      fetch(`${api}/api/task`, {
+      fetch(`${api}/tasks`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +73,7 @@ export default function Tasks() {
         throw new Error(`Task with id ${id} not found`);
       }
       const updatedCompleted = !taskToUpdate.completed;
-      await fetch(`${api}/api/task`, {
+      await fetch(`${api}/tasks`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +105,7 @@ export default function Tasks() {
 
   const handleEditTask = async (id: number) => {
     try {
-      await fetch(`${api}/api/task`, {
+      await fetch(`${api}/tasks`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

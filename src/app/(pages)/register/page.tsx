@@ -1,9 +1,8 @@
 "use client";
-
-import LoginPage from "./(pages)/login/page";
+import RegisterComponent from "@/components/register";
 import { SparklesCore } from "@/components/ui/sparkles";
 
-export default function Home() {
+const RegisterPage = () => {
   return (
     <div className="w-full h-screen">
       <div className="w-full z-10 absolute top-0 right-0 h-full">
@@ -18,10 +17,10 @@ export default function Home() {
         />
       </div>
       <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-30">
-        <div className="z-30">
-          <LoginPage />
-        </div>
+        <RegisterComponent />
       </div>
     </div>
   );
-}
+};
+
+export default RegisterPage;
